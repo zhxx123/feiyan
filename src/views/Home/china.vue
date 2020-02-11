@@ -16,7 +16,7 @@ import ConfirmLine from './components/confirmdaliy.vue'
 import ConfirmTotal from './components/confirmtotal.vue'
 import ConfirmHeal from './components/confirmheal.vue'
 import PieChart from './components/piechart.vue'
-import { getChinaDayRecord, getChinaDayList } from '@/api/person'
+import { getChinaDayTotal, getChinaDayRecord, getChinaDayList } from '@/api/person'
 export default {
   name: 'NanYang',
   components: {
@@ -76,6 +76,9 @@ export default {
         page: 1,
         limit: 100
       },
+      listQueryTotal: {
+        name: '中国'
+      },
       areaName: '中国'
     }
   },
@@ -85,25 +88,28 @@ export default {
     this.setPageTitle()
     this.getList()
     this.getLineList()
+    this.getChinaLineList()
   },
   methods: {
     getList() {
       this.listLoading = true
+      getChinaDayTotal(this.listQueryTotal).then(response => {
+        const tmpListData = response.data
+        if (tmpListData.length > 0) {
+          this.townRecord = tmpListData.data[0]
+          // 更新 累计确诊/死亡比率
+          this.handlerSerPipChart(this.townRecord)
+          // 更新累计确诊
+          // this.handlerSetTotalChart(tmpListData.data)
+        }
+        // console.log(this.townRecord)
+        this.listLoading = false
+      })
+    },
+    getChinaLineList() {
       getChinaDayRecord(this.listQuery).then(response => {
         const tmpListData = response.data
         if (tmpListData.length > 0) {
-          const chinaTmp = tmpListData.data[tmpListData.length - 1]
-          const lastTime = Date.parse(chinaTmp.UpdatedAt) / 1000
-          // console.log(chinaTmp.UpdatedAt, lastTime)
-          this.townRecord = {
-            total_confirm: chinaTmp.confirm,
-            total_suspect: chinaTmp.suspect,
-            total_heal: chinaTmp.heal,
-            total_dead: chinaTmp.dead,
-            last_time: lastTime
-          }
-          // 更新 累计确诊/死亡比率
-          this.handlerSerPipChart(chinaTmp)
           // 更新累计确诊
           this.handlerSetTotalChart(tmpListData.data)
         }
@@ -121,7 +127,7 @@ export default {
       })
     },
     setPageTitle() {
-      const title = '新型肺炎数据'
+      const title = '新冠肺炎(NCP)数据'
       document.title = `${title} - ${this.areaName}`
     },
     handlerSetChart(tmpListData) {
@@ -145,11 +151,11 @@ export default {
       })
     },
     handlerSerPipChart(chinaTmp) {
-      this.pipChartDeadData.value.push(chinaTmp.confirm)
-      this.pipChartDeadData.value.push(chinaTmp.dead)
+      this.pipChartDeadData.value.push(chinaTmp.total_confirm)
+      this.pipChartDeadData.value.push(chinaTmp.total_dead)
 
-      this.pipChartHealData.value.push(chinaTmp.confirm)
-      this.pipChartHealData.value.push(chinaTmp.heal)
+      this.pipChartHealData.value.push(chinaTmp.total_confirm)
+      this.pipChartHealData.value.push(chinaTmp.total_heal)
     },
     resetTemp() {
       this.listQuery = {

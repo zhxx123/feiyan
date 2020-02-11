@@ -7,7 +7,11 @@
     <ConfirmHeal :chart-data="healLineChartData" />
     <PieChart :pie-data="pipChartDeadData" />
     <PieChart :pie-data="pipChartHealData" />
+    <LineAgeChart :chart-data="lineAgeChartData" />
     <PersonTable :area-name="areaName" />
+    <div class="update-info">
+      <span style="color:white;" @click="updateAge">更新</span>
+    </div>
   </div>
 </template>
 <script>
@@ -16,8 +20,10 @@ import ConfirmLine from './components/confirmdaliy.vue'
 import ConfirmTotal from './components/confirmtotal.vue'
 import ConfirmHeal from './components/confirmheal.vue'
 import PieChart from './components/piechart.vue'
+import LineAgeChart from './components/lineAge.vue'
 import PersonTable from './components/person.vue'
-import { getTownRecord, getTownList } from '@/api/person'
+// import { location } from '@/utils/map'
+import { getTownRecord, getTownList, getAgeInfo, updateAgeInfo } from '@/api/person'
 export default {
   name: 'NanYang',
   components: {
@@ -26,6 +32,7 @@ export default {
     ConfirmTotal,
     ConfirmHeal,
     PieChart,
+    LineAgeChart,
     PersonTable
   },
   data() {
@@ -39,6 +46,13 @@ export default {
         healData: [],
         yAxisName: '每日新增人数',
         name: ['确诊', '疑似', '治愈', '死亡']
+      },
+      lineAgeChartData: {
+        xAxisData: ['确诊', '疑似', '治愈', '死亡'],
+        minAge: [],
+        maxAge: [],
+        yAxisName: '最小/最大年龄',
+        name: ['最小年龄', '最大年龄']
       },
       totalLineChartData: {
         xAxisData: [],
@@ -86,6 +100,7 @@ export default {
     this.setPageTitle()
     this.getList()
     this.getLineList()
+    this.getAgeList()
   },
   methods: {
     getList() {
@@ -98,7 +113,7 @@ export default {
           this.handlerSetTotalChart(tmpListData.data)
 
           // 更新 累计确诊/死亡比率
-          this.handlerSerPipChart(this.townRecord)
+          this.handlerSetPipChart(this.townRecord)
         }
         // console.log(this.townRecord)
         this.listLoading = false
@@ -113,8 +128,20 @@ export default {
         // this.resetTemp()
       })
     },
+    getAgeList() {
+      const tmpQuery = {
+        'area': this.listQuery.name
+      }
+      getAgeInfo(tmpQuery).then(response => {
+        const tmpListData = response.data
+        if (tmpListData !== null) {
+          this.handlerSetAgeChart(tmpListData)
+        }
+        // this.resetTemp()
+      })
+    },
     setPageTitle() {
-      const title = '新型肺炎数据'
+      const title = '新冠肺炎(NCP)数据'
       document.title = `${title} - ${this.areaName}`
     },
     handlerSetChart(tmpListData) {
@@ -137,12 +164,24 @@ export default {
         this.healLineChartData.deadData.push(item.total_dead)
       })
     },
-    handlerSerPipChart(chinaTmp) {
+    handlerSetPipChart(chinaTmp) {
       this.pipChartDeadData.value.push(chinaTmp.total_confirm)
       this.pipChartDeadData.value.push(chinaTmp.total_dead)
 
       this.pipChartHealData.value.push(chinaTmp.total_confirm)
       this.pipChartHealData.value.push(chinaTmp.total_heal)
+    },
+    handlerSetAgeChart(tmpAgeData) {
+      this.lineAgeChartData.maxAge = tmpAgeData.max
+      this.lineAgeChartData.minAge = tmpAgeData.min
+    },
+    updateAge() {
+      const tmpQuery = {
+        'area': this.listQuery.name
+      }
+      updateAgeInfo(tmpQuery).then(response => {
+        console.log('update', response.msg)
+      })
     },
     handleFilter() {
       this.getList()
@@ -162,6 +201,11 @@ export default {
   min-width: 350px;
   max-width: 800px;
   width: 100%;
-  /* border: 1px solid red; */
+  /* bord
+  er: 1px solid red; */
+}
+.update-info{
+  background: white;
+  width: 100%;
 }
 </style>

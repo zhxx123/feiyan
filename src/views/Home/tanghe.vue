@@ -7,7 +7,12 @@
     <ConfirmHeal :chart-data="healLineChartData" />
     <PieChart :pie-data="pipChartDeadData" />
     <PieChart :pie-data="pipChartHealData" />
+    <LineAgeChart :chart-data="lineAgeChartData" />
+    <TangheMap />
     <PersonTable :area-name="areaName" />
+    <div class="update-info">
+      <span style="color:white;" @click="updateAge">更新</span>
+    </div>
   </div>
 </template>
 <script>
@@ -16,8 +21,10 @@ import ConfirmLine from './components/confirmdaliy.vue'
 import ConfirmTotal from './components/confirmtotal.vue'
 import ConfirmHeal from './components/confirmheal.vue'
 import PieChart from './components/piechart.vue'
+import LineAgeChart from './components/lineAge.vue'
+import TangheMap from './components/thMap.vue'
 import PersonTable from './components/person.vue'
-import { getTownRecord, getTownList } from '@/api/person'
+import { getTownRecord, getTownList, getAgeInfo, updateAgeInfo } from '@/api/person'
 export default {
   name: 'TangHe',
   components: {
@@ -26,6 +33,8 @@ export default {
     ConfirmTotal,
     ConfirmHeal,
     PieChart,
+    LineAgeChart,
+    TangheMap,
     PersonTable
   },
   data() {
@@ -52,6 +61,13 @@ export default {
         deadData: [],
         yAxisName: '累计(治愈/死亡)人数',
         name: ['治愈', '死亡']
+      },
+      lineAgeChartData: {
+        xAxisData: ['确诊', '疑似', '治愈', '死亡'],
+        minAge: [],
+        maxAge: [],
+        yAxisName: '最小/最大年龄',
+        name: ['最小年龄', '最大年龄']
       },
       townRecord: {
         last_time: 0,
@@ -86,6 +102,7 @@ export default {
     this.setPageTitle()
     this.getList()
     this.getLineList()
+    this.getAgeList()
   },
   methods: {
     getList() {
@@ -113,8 +130,20 @@ export default {
         // this.resetTemp()
       })
     },
+    getAgeList() {
+      const tmpQuery = {
+        'area': this.listQuery.name
+      }
+      getAgeInfo(tmpQuery).then(response => {
+        const tmpListData = response.data
+        if (tmpListData !== null) {
+          this.handlerSetAgeChart(tmpListData)
+        }
+        // this.resetTemp()
+      })
+    },
     setPageTitle() {
-      const title = '新型肺炎数据'
+      const title = '新冠肺炎(NCP)数据'
       document.title = `${title} - ${this.areaName}`
     },
     handlerSetChart(tmpListData) {
@@ -145,8 +174,20 @@ export default {
       this.pipChartHealData.value.push(chinaTmp.total_confirm)
       this.pipChartHealData.value.push(chinaTmp.total_heal)
     },
+    handlerSetAgeChart(tmpAgeData) {
+      this.lineAgeChartData.maxAge = tmpAgeData.max
+      this.lineAgeChartData.minAge = tmpAgeData.min
+    },
     handleFilter() {
       this.getList()
+    },
+    updateAge() {
+      const tmpQuery = {
+        'area': this.listQuery.name
+      }
+      updateAgeInfo(tmpQuery).then(response => {
+        console.log('update', response.msg)
+      })
     },
     resetTemp() {
       this.listQuery = {
@@ -164,5 +205,9 @@ export default {
   max-width: 800px;
   width: 100%;
   /* border: 1px solid red; */
+}
+.update-info{
+  background: white;
+  width: 100%;
 }
 </style>

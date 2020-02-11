@@ -40,6 +40,9 @@ export default {
     },
     windowWeight() {
       this.screenWidth = document.body.clientWidth
+    },
+    updateInfo() {
+
     }
   }
 }

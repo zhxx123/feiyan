@@ -41,7 +41,7 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="序号" prop="id" align="center" width="70">
+      <el-table-column label="序号" prop="id" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.ID }}</span>
         </template>
