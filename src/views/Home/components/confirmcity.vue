@@ -62,7 +62,7 @@ export default {
     initChart() {
       if (document.body.clientWidth < 600) {
         this.legendSpace = 1
-        this.legendTop = 100
+        this.legendTop = 38
       }
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
@@ -113,13 +113,12 @@ export default {
         legend: {
           show: true,
           right: this.legendTop,
+          top: 5,
           data: name
         },
         toolbox: {
           feature: {
-            saveAsImage: {},
-            magicType: { type: ['line'] },
-            restore: {}
+            saveAsImage: {}
           }
         },
         series: [

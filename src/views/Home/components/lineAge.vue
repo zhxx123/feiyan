@@ -187,6 +187,7 @@ export default {
 <style scoped>
   .chart {
     margin-left:10px;
+    margin-top:10px;
     height:100px;
     padding-top: 10px;
     /* border: 1px solid red; */

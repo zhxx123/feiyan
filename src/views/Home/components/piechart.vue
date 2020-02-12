@@ -16,7 +16,7 @@ export default {
     },
     width: {
       type: String,
-      default: '100%'
+      default: '96%'
     },
     height: {
       type: String,
@@ -74,9 +74,20 @@ export default {
           formatter: '{a} <br/>{b} : {c}人 ({d}%)'
         },
         legend: {
-          left: 'right',
+          right: 30,
           // bottom: '10',
           data: label
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
         },
         series: [
           {
@@ -115,10 +126,10 @@ export default {
 </script>
 <style scoped>
   .chart {
+    margin-left:10px;
     margin-top: 10px;
-    margin-left:5px;
-    padding-top: 10px;
     height:100px;
+    padding-top: 10px;
     /* border: 1px solid red; */
     background: white;
   }

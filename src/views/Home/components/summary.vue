@@ -100,6 +100,7 @@ export default {
 <style lang="scss" scoped>
 .dashboard-editor-container {
   margin-top: 10px;
+  margin-left: 10px;
   margin-bottom:10px;
   background-color: rgb(240, 242, 245);
   // position: relative;

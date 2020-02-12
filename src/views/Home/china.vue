@@ -65,7 +65,7 @@ export default {
       townRecordLast: {
         xAxisData: [],
         cityName: [],
-        yAxisName: '各省市累计确诊',
+        yAxisName: '各省市累计确诊(不含湖北)',
         ySubAxisName: '',
         name: ['确诊人数']
       },
