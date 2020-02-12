@@ -14,6 +14,7 @@ export function getTownRecord(query) {
     params: query
   })
 }
+
 export function getTownList(query) {
   return request({
     url: '/api/town/list',
@@ -22,6 +23,13 @@ export function getTownList(query) {
   })
 }
 
+export function getTownRecordLast(query) {
+  return request({
+    url: '/api/town/lastrecord',
+    method: 'get',
+    params: query
+  })
+}
 export function getChinaDayTotal(query) {
   return request({
     url: '/api/country/record',

@@ -34,7 +34,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <div class="pie-chart-tip">数据来源: 市卫健委</div>
+              <div class="pie-chart-tip">数据来源: 卫健委</div>
             </el-col>
           </el-row>
         </div>

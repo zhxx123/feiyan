@@ -8,7 +8,7 @@
     <PieChart :pie-data="pipChartDeadData" />
     <PieChart :pie-data="pipChartHealData" />
     <LineAgeChart :chart-data="lineAgeChartData" />
-    <TangheMap />
+    <!-- <TangheMap /> -->
     <PersonTable :area-name="areaName" />
     <div class="update-info">
       <span style="color:white;" @click="updateAge">更新</span>
@@ -22,7 +22,7 @@ import ConfirmTotal from './components/confirmtotal.vue'
 import ConfirmHeal from './components/confirmheal.vue'
 import PieChart from './components/piechart.vue'
 import LineAgeChart from './components/lineAge.vue'
-import TangheMap from './components/thMap.vue'
+// import TangheMap from './components/thMap.vue'
 import PersonTable from './components/person.vue'
 import { getTownRecord, getTownList, getAgeInfo, updateAgeInfo } from '@/api/person'
 export default {
@@ -34,7 +34,7 @@ export default {
     ConfirmHeal,
     PieChart,
     LineAgeChart,
-    TangheMap,
+    // TangheMap,
     PersonTable
   },
   data() {

@@ -5,6 +5,7 @@
     <ConfirmLine :chart-data="lineChartData" />
     <ConfirmTotal :chart-data="totalLineChartData" />
     <ConfirmHeal :chart-data="healLineChartData" />
+    <ConfirmCity :chart-data="townRecordLast" />
     <PieChart :pie-data="pipChartDeadData" />
     <PieChart :pie-data="pipChartHealData" />
   </div>
@@ -14,8 +15,9 @@ import Summary from './components/summary.vue'
 import ConfirmLine from './components/confirmdaliy.vue'
 import ConfirmTotal from './components/confirmtotal.vue'
 import ConfirmHeal from './components/confirmheal.vue'
+import ConfirmCity from './components/confirmcity.vue'
 import PieChart from './components/piechart.vue'
-import { getTownRecord, getTownList } from '@/api/person'
+import { getTownRecord, getTownList, getTownRecordLast } from '@/api/person'
 export default {
   name: 'Henan',
   components: {
@@ -23,6 +25,7 @@ export default {
     ConfirmLine,
     ConfirmTotal,
     ConfirmHeal,
+    ConfirmCity,
     PieChart
   },
   data() {
@@ -57,6 +60,13 @@ export default {
         heal: 0,
         dead: 0
       },
+      townRecordLast: {
+        xAxisData: [],
+        cityName: [],
+        yAxisName: '各地市累计确诊',
+        ySubAxisName: '',
+        name: ['确诊人数']
+      },
       pipChartDeadData: {
         value: [],
         label: ['确诊', '死亡'],
@@ -83,6 +93,7 @@ export default {
     this.setPageTitle()
     this.getList()
     this.getLineList()
+    this.getTownRecordLastLine()
   },
   methods: {
     getList() {
@@ -108,6 +119,18 @@ export default {
           this.handlerSetChart(tmpListData.data)
         }
         // this.resetTemp()
+      })
+    },
+    getTownRecordLastLine() {
+      getTownRecordLast(this.listQuery).then(response => {
+        const tmpListData = response.data
+        if (tmpListData.length > 0) {
+          // this.townRecordLast = tmpListData.data[tmpListData.length - 1]
+          // 更新省内地市累计确诊
+          this.handlerSetRecordLastChart(tmpListData.data)
+        }
+        // console.log(this.townRecord)
+        this.listLoading = false
       })
     },
     setPageTitle() {
@@ -140,6 +163,13 @@ export default {
 
       this.pipChartHealData.value.push(chinaTmp.total_confirm)
       this.pipChartHealData.value.push(chinaTmp.total_heal)
+    },
+    handlerSetRecordLastChart(tmpListData) {
+      tmpListData.forEach((item) => {
+        this.townRecordLast.xAxisData.push(item.total_confirm)
+        this.townRecordLast.cityName.push(item.name)
+      })
+      this.townRecordLast.ySubAxisName = `统计截止: 2020.${tmpListData[0].date} 24时`
     },
     handleFilter() {
       this.getList()

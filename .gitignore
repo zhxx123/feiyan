@@ -20,5 +20,6 @@ selenium-debug.log
 *.local
 *.tgz
 *.tar.gz
+*.sh
 package-lock.json
 yarn.lock
