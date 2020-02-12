@@ -51,6 +51,12 @@ export function getChinaDayList(query) {
     params: query
   })
 }
+export function getProvinceRecordLast() {
+  return request({
+    url: '/api/province/record',
+    method: 'get'
+  })
+}
 
 export function getAgeInfo(query) {
   return request({

@@ -7,6 +7,7 @@
     <ConfirmHeal :chart-data="healLineChartData" />
     <PieChart :pie-data="pipChartDeadData" />
     <PieChart :pie-data="pipChartHealData" />
+    <ConfirmCity :chart-data="townRecordLast" :height="lineHeight" />
     <!-- <PersonTable :area-name="areaName" /> -->
   </div>
 </template>
@@ -15,15 +16,18 @@ import Summary from './components/summary.vue'
 import ConfirmLine from './components/confirmdaliy.vue'
 import ConfirmTotal from './components/confirmtotal.vue'
 import ConfirmHeal from './components/confirmheal.vue'
+import ConfirmCity from './components/confirmcity.vue'
 import PieChart from './components/piechart.vue'
-import { getChinaDayTotal, getChinaDayRecord, getChinaDayList } from '@/api/person'
+import { getChinaDayTotal, getChinaDayRecord, getChinaDayList, getProvinceRecordLast } from '@/api/person'
+import { parseTime } from '@/utils'
 export default {
-  name: 'NanYang',
+  name: 'China',
   components: {
     Summary,
     ConfirmLine,
     ConfirmTotal,
     ConfirmHeal,
+    ConfirmCity,
     PieChart
   },
   data() {
@@ -58,6 +62,13 @@ export default {
         total_heal: 0,
         total_dead: 0
       },
+      townRecordLast: {
+        xAxisData: [],
+        cityName: [],
+        yAxisName: '各省市累计确诊',
+        ySubAxisName: '',
+        name: ['确诊人数']
+      },
       pipChartDeadData: {
         value: [],
         label: ['确诊', '死亡'],
@@ -65,6 +76,7 @@ export default {
         yAxisName: '累计(确诊/死亡)',
         colors: ['#f55253', '#66666e']
       },
+      lineHeight: '800px',
       pipChartHealData: {
         value: [],
         label: ['确诊', '治愈'],
@@ -89,6 +101,7 @@ export default {
     this.getList()
     this.getLineList()
     this.getChinaLineList()
+    this.getProvinceRecordLastLine()
   },
   methods: {
     getList() {
@@ -126,6 +139,18 @@ export default {
         // this.resetTemp()
       })
     },
+    getProvinceRecordLastLine() {
+      getProvinceRecordLast().then(response => {
+        const tmpListData = response.data
+        if (tmpListData.length > 0) {
+          // this.townRecordLast = tmpListData.data[tmpListData.length - 1]
+          // 更新省内地市累计确诊
+          this.handlerSetRecordLastChart(tmpListData.data)
+        }
+        // console.log(this.townRecord)
+        this.listLoading = false
+      })
+    },
     setPageTitle() {
       const title = '新冠肺炎(NCP)数据'
       document.title = `${title} - ${this.areaName}`
@@ -156,6 +181,16 @@ export default {
 
       this.pipChartHealData.value.push(chinaTmp.total_confirm)
       this.pipChartHealData.value.push(chinaTmp.total_heal)
+    },
+    handlerSetRecordLastChart(tmpListData) {
+      tmpListData.forEach((item) => {
+        if (item.name !== '湖北') {
+          this.townRecordLast.xAxisData.push(item.total_confirm)
+          this.townRecordLast.cityName.push(item.name)
+        }
+      })
+      const lastTime = parseTime(tmpListData[0].last_time)
+      this.townRecordLast.ySubAxisName = `统计截止: ${lastTime}`
     },
     resetTemp() {
       this.listQuery = {
