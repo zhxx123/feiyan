@@ -5,7 +5,7 @@ Vue.use(Router)
 // 404 not fund
 // import NotFound from '@/views/NotFound.vue'
 const router = new Router({
-  mode: 'history', // 不显示 "#"路由地址
+  // mode: 'history', // 不显示 "#"路由地址
   routes: [
     {
       path: '/',
