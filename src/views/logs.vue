@@ -5,6 +5,7 @@
         v-for="(activity, index) in tableList"
         :key="index"
         :timestamp="activity.time"
+        :placement="top"
       >
         <el-card>
           <h4>{{ activity.content }}</h4>
@@ -63,7 +64,7 @@ export default {
         const tmp = {
           'time': parseTime(item.time),
           'content': item.content,
-          'after_id': item.after_id,
+          'after_id': item.after_id.substr(0, 8),
           'time_stamp': parseTime(item.time_stamp),
           'author_name': item.author_name
         }
