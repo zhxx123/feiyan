@@ -20,9 +20,6 @@
             <el-form-item label="是否强制更新">
               <span>{{ props.row.forced }}</span>
             </el-form-item>
-            <el-form-item label="内容:">
-              <span>{{ props.row.output }}</span>
-            </el-form-item>
           </el-form>
         </template>
       </el-table-column>
