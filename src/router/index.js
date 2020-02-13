@@ -14,23 +14,28 @@ const router = new Router({
     },
     {
       path: '/tanghe',
-      name: 'home',
+      name: 'tanghe',
       component: () => import('@/views/Home/tanghe.vue')
     },
     {
       path: '/nanyang',
-      name: 'home',
+      name: 'nanyang',
       component: () => import('@/views/Home/nanyang.vue')
     },
     {
       path: '/henan',
-      name: 'home',
+      name: 'henan',
       component: () => import('@/views/Home/henan.vue')
     },
     {
       path: '/china',
-      name: 'home',
+      name: 'china',
       component: () => import('@/views/Home/china.vue')
+    },
+    {
+      path: '/logs',
+      name: 'logs',
+      component: () => import('@/views/logs.vue')
     },
     {
       path: '**', // 错误路由

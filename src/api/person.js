@@ -73,3 +73,11 @@ export function updateAgeInfo(data) {
     data
   })
 }
+
+export function getGitLogsInfo(query) {
+  return request({
+    url: '/api/notify/logs',
+    method: 'get',
+    params: query
+  })
+}
