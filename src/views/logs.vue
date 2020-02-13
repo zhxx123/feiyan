@@ -84,6 +84,7 @@ export default {
   // background:1px solid red;
   background: white;
   margin-top: 10px;
+  margin-left: 10px;
   // position: relative;
 
   .chart-wrapper {
