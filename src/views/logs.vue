@@ -5,7 +5,7 @@
         v-for="(activity, index) in tableList"
         :key="index"
         :timestamp="activity.time"
-        :placement="top"
+        placement="top"
       >
         <el-card>
           <h4>{{ activity.content }}</h4>
@@ -63,7 +63,7 @@ export default {
       tmpListData.forEach((item) => {
         const tmp = {
           'time': parseTime(item.time),
-          'content': item.content,
+          'content': item.output,
           'after_id': item.after_id.substr(0, 8),
           'time_stamp': parseTime(item.time_stamp),
           'author_name': item.author_name
@@ -79,7 +79,7 @@ export default {
 .dashboard-editor-container {
   // height: 200px;
   min-width: 340px;
-  width: 100%;
+  width: 90%;
   padding-top: 10px;
   // background:1px solid red;
   background: white;
