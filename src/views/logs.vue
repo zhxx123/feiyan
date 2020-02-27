@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       tableList: [],
-      reverse: true,
+      reverse: false,
       listQuery: {
         page: 1,
         limit: 5

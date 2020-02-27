@@ -152,7 +152,7 @@ export default {
       })
     },
     setPageTitle() {
-      const title = '新冠肺炎(NCP)数据'
+      const title = '新冠肺炎(COVID-19)数据'
       document.title = `${title} - ${this.areaName}`
     },
     handlerSetChart(tmpListData) {
