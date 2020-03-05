@@ -16,7 +16,7 @@
             <el-col :span="6">
               <div class="grid-content bg-purple">
                 <div class="suspect-num numbers">{{ sumaryData.total_suspect }}</div>
-                <div class="suspect-text texts">累计疑似</div>
+                <div class="suspect-text texts">疑似</div>
               </div>
             </el-col>
             <el-col :span="6">
