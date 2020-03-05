@@ -9,8 +9,9 @@
       >
         <el-card>
           <h4>{{ activity.content }}</h4>
-          <p>最新ID: {{ activity.after_id }}</p>
-          <p>{{ activity.author_name }} 提交于 {{ activity.time_stamp }}</p>
+          <p>分支: {{ activity.refer }} </p>
+          <p>最新ID: {{ activity.after_id }} 打包状态: <el-tag :type="activity.status | statusTypeFilter">{{ activity.status| statusFilter }}</el-tag></p>
+          <p>提交者: {{ activity.author_name }} 提交于: {{ activity.time_stamp }}</p>
         </el-card>
       </el-timeline-item>
     </el-timeline>
@@ -29,6 +30,23 @@ export default {
       } else {
         return '暂无'
       }
+    },
+    statusFilter(status) {
+      if (status) {
+        return '成功'
+      } else {
+        return '失败'
+      }
+    },
+    statusTypeFilter(status) {
+      const statusMap = {
+        0: 'success',
+        1: 'danger'
+      }
+      if (status) {
+        return statusMap[0]
+      }
+      return statusMap[1]
     }
   },
   data() {
@@ -66,7 +84,8 @@ export default {
           'content': item.output,
           'after_id': item.after_id.substr(0, 8),
           'time_stamp': parseTime(item.time_stamp),
-          'author_name': item.author_name
+          'author_name': item.author_name,
+          'status': item.status
         }
         this.tableList.push(tmp)
       })
